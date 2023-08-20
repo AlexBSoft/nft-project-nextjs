@@ -5,6 +5,7 @@ import LogoutButton from '../../components/LogoutButton'
 
 import NftCreateForm from '@/components/NftCreateForm'
 import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,13 +35,8 @@ export default async function CreatePage() {
 
                 </div>
 
+                <Footer/>
 
-
-                <div className="flex justify-center text-center text-xs">
-                    <p>
-                        Создано в Таганроге
-                    </p>
-                </div>
             </div>
         </div>
     )
