@@ -19,8 +19,17 @@ type NftTypeDB = {
     price: string,
     color: String,
     created_at: String,
+    blockchain: String,
     owner: String,
     creator: String
 };
 
-export type { NftType, NftTypeDB }
+type Transfer = {
+    id: string,
+    created_at: String,
+    nft_id: string,
+    user_from: string,
+    user_to: string,
+}
+
+export type { NftType, NftTypeDB, Transfer }

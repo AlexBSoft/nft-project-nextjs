@@ -34,10 +34,16 @@ export default async function Index() {
           <div className="py-3 px-6 rounded-lg font-mono text-sm">
             Создайте свой первый NFT
           </div>
-          {/* Вот тут сделать проверку залогинен ли юзер. Объект "user" уже есть в этом файле */}
+          {user ? (
           <Link href="/create">
             <button className="btn mt-4 btn-primary">Создать NFT</button>
-          </Link>
+          </Link>):(
+            <Link
+            href="/login"
+            className="">
+            <button className="btn mt-4 btn-primary">Регистрация</button>
+        </Link>
+          )}
         </div>
         <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
         <div className="flex flex-col gap-8 text-foreground">

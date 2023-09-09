@@ -4,13 +4,15 @@ import Link from 'next/link'
 import LogoutButton from '@/components/LogoutButton'
 import Navbar from '@/components/Navbar'
 
-import type { NftTypeDB } from "@/types/nft.type"
+import type { NftTypeDB, Transfer } from "@/types/nft.type"
 import Footer from '@/components/Footer'
 
 export const dynamic = 'force-dynamic'
 
 import { BiSend } from "react-icons/bi";
-import {FaCartShopping} from "react-icons/fa6"
+import { FaCartShopping } from "react-icons/fa6"
+import NftTransferModal from './nftTransferModal'
+import SmartContractModal from './smartContractModal'
 
 export default async function NftPage({ params }: { params: { id: string } }) {
     const supabase = createServerComponentClient({ cookies })
@@ -23,6 +25,11 @@ export default async function NftPage({ params }: { params: { id: string } }) {
     const { data: nft, error } = await supabase
         .from('nfts')
         .select<string, NftTypeDB>().eq('id', params.id)
+
+    // Получение истории NFT из БД
+    const { data: transfers, error: terror } = await supabase
+        .from('transfers')
+        .select<string, Transfer>().eq('nft_id', params.id)
 
     return (
         <div className="w-full flex flex-col items-center">
@@ -49,37 +56,42 @@ export default async function NftPage({ params }: { params: { id: string } }) {
 
                                 <span>Создан: <p>{nft[0].created_at}</p></span>
 
-                                <span>Создатель: 
-                                    <Link href={"/profile/"+nft[0].creator} className='btn btn-ghost'>
-                                    <img src={`https://avatars.dicebear.com/api/male/${nft[0].creator}.svg`} style={{height:'16px', display: 'inline', marginBottom: "0.25em"}} />
-                                        {nft[0].creator} 
+                                <span>Создатель:
+                                    <Link href={"/profile/" + nft[0].creator} className='btn btn-ghost'>
+                                        <img src={`https://avatars.dicebear.com/api/male/${nft[0].creator}.svg`} style={{ height: '16px', display: 'inline', marginBottom: "0.25em" }} />
+                                        {nft[0].creator}
                                     </Link>
                                 </span>
 
-                                <span>Владелец: 
-                                    <Link href={"/profile/"+nft[0].creator} className='btn btn-ghost'>
-                                    <img src={`https://avatars.dicebear.com/api/male/${nft[0].owner}.svg`} style={{height:'16px', display: 'inline', marginBottom: "0.25em"}} />
+                                <span>Владелец:
+                                    <Link href={"/profile/" + nft[0].owner} className='btn btn-ghost'>
+                                        <img src={`https://avatars.dicebear.com/api/male/${nft[0].owner}.svg`} style={{ height: '16px', display: 'inline', marginBottom: "0.25em" }} />
                                         {nft[0].owner}
                                     </Link>
                                 </span>
 
                             </div>
-                            <ul className="menu menu-horizontal bg-base-200 rounded-box mt-6">
+                            <ul className="menu menu-horizontal bg-base-200 rounded-box my-4">
                                 <li>
-                                    <a className="tooltip" data-tip="Передать">
-                                       <BiSend size='1.5rem'/>
-                                    </a>
+                                    <NftTransferModal nft_id={Number(params.id)} />
                                 </li>
                                 <li>
                                     <a className="tooltip" data-tip="Купить">
-                                        <FaCartShopping size='1.5rem'/>
+                                        <FaCartShopping size='1.5rem' />
                                     </a>
                                 </li>
                             </ul>
+
+                            NFT не загружен в блокчейн
+                            <SmartContractModal nft_id={params.id}/>
+                            
                         </div>
                     </div>
                 </>
                 ) : (<strong className='flex justify-center'>NFT не найден</strong>)}
+
+
+                {transfers?.map((transfer) => (<div> {transfer.created_at} Передан <br /> От: {transfer.user_from}<br /> К: {transfer.user_to}</div>))}
             </div>
             <Footer />
         </div>
