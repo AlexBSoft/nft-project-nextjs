@@ -13,6 +13,7 @@ import { BiSend } from "react-icons/bi";
 import { FaCartShopping } from "react-icons/fa6"
 import NftTransferModal from './nftTransferModal'
 import SmartContractModal from './smartContractModal'
+import NftBuyModal from './nftBuyModal'
 
 export default async function NftPage({ params }: { params: { id: string } }) {
     const supabase = createServerComponentClient({ cookies })
@@ -76,9 +77,8 @@ export default async function NftPage({ params }: { params: { id: string } }) {
                                     <NftTransferModal nft_id={Number(params.id)} />
                                 </li>
                                 <li>
-                                    <a className="tooltip" data-tip="Купить">
-                                        <FaCartShopping size='1.5rem' />
-                                    </a>
+                                    <NftBuyModal nft_id={Number(params.id)} nft={nft[0]} />
+                                    
                                 </li>
                             </ul>
 

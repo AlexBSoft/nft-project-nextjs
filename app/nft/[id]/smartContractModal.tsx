@@ -23,26 +23,27 @@ const SmartContractModal: NextComponentType<NextPageContext, {}, Props> = (
                     <SyntaxHighlighter language="javascript" style={docco}>
                         {`// SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.9;
+                        pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+                        import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+                        import "@openzeppelin/contracts/access/Ownable.sol";
+                        import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+                        import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract TestToken is ERC721, ReentrancyGuard, Ownable {
-  using Counters for Counters.Counter;
+                        contract TestToken is ERC721, ReentrancyGuard, Ownable {
+                        using Counters for Counters.Counter;
 
-  constructor(string memory customBaseURI_) ERC721("TestToken", "TTKN") {
-    customBaseURI = customBaseURI_;
-  }
+                        constructor(string memory customBaseURI_) ERC721("TestToken", "TTKN") {
+                            customBaseURI = customBaseURI_;
+                        }
 
-  /** MINTING **/
+                        /** MINTING **/
 
-  uint256 public constant MAX_SUPPLY = 1000;
+                        uint256 public constant MAX_SUPPLY = 1000;
 
-  Counters.Counter private supplyCounter;`}
+                        Counters.Counter private supplyCounter;`}
                     </SyntaxHighlighter>
+                    <button className="btn w-full mt-4">Загрузить NFT в блокчейн</button>
                     <div className="modal-action">
                         <form method="dialog">
                             {/* if there is a button in form, it will close the modal */}
