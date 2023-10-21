@@ -21,27 +21,33 @@ const SmartContractModal: NextComponentType<NextPageContext, {}, Props> = (
                 <div className="modal-box">
                     <h3 className="font-bold text-lg">Код смарт контракта</h3>
                     <SyntaxHighlighter language="javascript" style={docco}>
-                        {`// SPDX-License-Identifier: MIT
+                        {`// contracts/GameItem.sol
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
 
-                        pragma solidity ^0.8.9;
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
-                        import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-                        import "@openzeppelin/contracts/access/Ownable.sol";
-                        import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-                        import "@openzeppelin/contracts/utils/Counters.sol";
+contract GameItem is ERC721URIStorage {
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
 
-                        contract TestToken is ERC721, ReentrancyGuard, Ownable {
-                        using Counters for Counters.Counter;
+    constructor() ERC721("NFTICTIS", "ICTIS") {
+        awardItem(msg.sender, "https://nft.ictis.ru/nftdata/${props.nft_id}.json");
+    }
 
-                        constructor(string memory customBaseURI_) ERC721("TestToken", "TTKN") {
-                            customBaseURI = customBaseURI_;
-                        }
+    function awardItem(address player, string memory tokenURI)
+        public
+        returns (uint256)
+    {
+        uint256 newItemId = _tokenIds.current();
+        _mint(player, newItemId);
+        _setTokenURI(newItemId, tokenURI);
 
-                        /** MINTING **/
-
-                        uint256 public constant MAX_SUPPLY = 1000;
-
-                        Counters.Counter private supplyCounter;`}
+        _tokenIds.increment();
+        return newItemId;
+    }
+}`}
                     </SyntaxHighlighter>
                     <button className="btn w-full mt-4">Загрузить NFT в блокчейн</button>
                     <div className="modal-action">
